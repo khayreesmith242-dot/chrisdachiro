@@ -1,0 +1,9 @@
+{
+  "name": "chrisdachiro-therapy-tools",
+  "private": true,
+  "type": "module",
+  "description": "CDCTherapyTools.com storefront + back end",
+  "dependencies": {
+    "@netlify/blobs": "^11.1.7"
+  }
+}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Confirmed | ChrisDaChiro Therapy Tools</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <main class="success-page">
+    <div class="success-card">
+      <img src="assets/logo-sm.png" alt="ChrisDaChiro Therapy Tools" class="success-logo" />
+      <div class="done-mark">✓</div>
+      <p class="eyebrow">Thank you</p>
+      <h1>Order <em>confirmed</em></h1>
+      <p class="lead">Your payment went through and your order is in. A confirmation is on its way to your email.</p>
+      <div class="order-id">Order <strong data-order>—</strong></div>
+      <p>Please allow about <strong>2 weeks</strong> for delivery. Questions? DM <a href="https://instagram.com/ChrisDaChiro" target="_blank" rel="noopener">@ChrisDaChiro</a>.</p>
+      <a href="/" class="btn btn-primary">Back to the shop</a>
+    </div>
+  </main>
+  <script>
+    try { localStorage.removeItem("cdc-cart"); } catch (e) {}
+    var id = new URLSearchParams(location.search).get("order");
+    var el = document.querySelector("[data-order]");
+    if (id && /^CDC-[A-Z0-9]+$/.test(id)) el.textContent = id; else el.parentElement.remove();
+  </script>
+</body>
+</html>

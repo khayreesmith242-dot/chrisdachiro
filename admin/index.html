@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>ChrisDaChiro Admin</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{--ink:#12324a;--bone:#f4fafe;--stone:#e6f4fc;--line:#dbe7ef;--muted:#5b6d7a;--accent:#4f9bc9;--tan:#d9a774;--red:#b03a2e;--display:"Cormorant Garamond",Georgia,serif;--body:"Manrope",system-ui,sans-serif}
+*{box-sizing:border-box}body{margin:0;font-family:var(--body);background:var(--bone);color:var(--ink);font-size:14px}
+button,input,select,textarea{font:inherit;color:inherit}
+.hide{display:none!important}
+.brand{font-family:var(--display);font-size:24px;letter-spacing:.04em}.brand span{font-family:var(--body);font-size:.45em;letter-spacing:.3em;color:var(--tan);margin-left:6px;font-weight:700}
+.btn{border:1px solid var(--ink);background:var(--ink);color:var(--bone);padding:10px 16px;border-radius:4px;font-weight:600;font-size:12px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap}
+.btn.ghost{background:transparent;color:var(--ink)}.btn:disabled{opacity:.5;cursor:wait}
+input,select,textarea{border:1px solid var(--line);border-radius:4px;padding:9px 11px;background:#fff;width:100%;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--ink)}
+/* login */
+.login{min-height:100vh;display:grid;place-items:center;background:var(--ink);color:#fff;padding:20px}
+.login form{width:min(360px,100%);display:grid;gap:12px}.login .brand{font-size:40px;margin-bottom:6px}
+.login input{background:#1c4563;border-color:#2b5b7e;color:#fff;padding:13px}
+.login .btn{background:var(--tan);border-color:var(--tan);color:#fff;padding:13px;border-radius:999px}.err{color:#e07a6f;min-height:1.2em;font-size:13px;margin:0}
+/* shell */
+header{background:var(--ink);color:var(--bone);position:sticky;top:0;z-index:5}
+.bar{max-width:1280px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:20px}
+.tabs{display:flex;gap:4px;margin-left:12px}.tab{background:none;border:0;color:#9fc3dc;padding:8px 12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:12px;cursor:pointer;border-radius:4px}
+.tab.on{color:#fff;background:#1f4a69}.spacer{flex:1}
+header .btn.ghost{color:#fff;border-color:#3d6787}
+main{max-width:1280px;margin:0 auto;padding:24px 20px 60px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat{background:#fff;border-radius:6px;padding:16px 18px}.stat b{display:block;font-family:var(--display);font-size:32px;font-weight:600;line-height:1.1;color:var(--ink)}
+.stat span{color:var(--muted);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.tools{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}.tools input{max-width:240px}.tools select{max-width:220px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 12px;cursor:pointer;font-size:12px;font-weight:600}
+.chip.on{background:var(--ink);color:var(--bone);border-color:var(--ink)}
+.list{display:grid;gap:8px}
+.row{background:#fff;border-radius:6px;overflow:hidden}
+.row-head{display:grid;grid-template-columns:130px 1.3fr 1.6fr 90px 120px 150px;gap:12px;align-items:center;padding:14px 16px;cursor:pointer}
+.row-head:hover{background:#f7fbfe}.id{font-family:ui-monospace,Menlo,monospace;font-weight:700}
+.sub{color:var(--muted);font-size:12px}.total{font-weight:700}
+.pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.s-unpaid{background:#fdecc8;color:#7a5200}.s-paid{background:#d6f3f1;color:#0b5e5b}.s-in_production{background:#e4e0ff;color:#3d2fa8}.s-shipped{background:#dff3dc;color:#22622a}.s-cancelled{background:#eee;color:#777}
+.m-card{background:#eef;color:#334}.m-cashapp{background:#dcf7e6;color:#0a6b33}
+.row-body{border-top:1px solid var(--line);padding:18px 16px;display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:24px}
+.row-body h4{margin:0 0 8px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.row-body p{margin:0 0 6px}.items div{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px solid #eef3f7}
+.edit{display:grid;gap:8px}.two{display:grid;grid-template-columns:110px 1fr;gap:8px}
+.check{display:flex;gap:8px;align-items:center;font-size:13px}.check input{width:auto}
+.hist{font-size:12px;color:var(--muted);margin-top:8px}
+.empty{text-align:center;padding:60px;color:var(--muted);background:#fff;border-radius:6px}
+/* products */
+.pgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.pcard{background:#fff;border-radius:6px;padding:20px;display:grid;gap:12px}
+.pcard h3{margin:0;font-family:var(--display);font-weight:600;font-size:26px}
+.toggle{display:flex;align-items:center;gap:10px;cursor:pointer;font-weight:600}.toggle input{display:none}
+.sw{width:42px;height:24px;border-radius:99px;background:#ccc;position:relative;transition:.2s}.sw::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.2s}
+.toggle input:checked+.sw{background:var(--red)}.toggle input:checked+.sw::after{left:21px}
+.price{display:flex;align-items:center;gap:6px;max-width:160px}.price span{font-weight:700;font-size:18px}
+.savebar{display:flex;justify-content:flex-end;gap:12px;align-items:center;margin-top:16px}
+.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,20px);background:var(--ink);color:var(--bone);padding:12px 20px;border-radius:999px;opacity:0;transition:.25s;pointer-events:none;z-index:20}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}.row-head{grid-template-columns:1fr auto;gap:6px}.row-head .c-hide{display:none}.row-body{grid-template-columns:1fr}.pgrid{grid-template-columns:1fr}.bar{flex-wrap:wrap;gap:8px}.tabs{margin-left:0}}
+</style>
+</head>
+<body>
+
+<section class="login" id="login">
+  <form id="loginForm">
+    <img src="/assets/logo-sm.png" alt="ChrisDaChiro Therapy Tools" style="width:240px;margin:0 auto 6px;background:#fff;border-radius:14px;padding:10px" />
+    <div class="brand" style="text-align:center">Dashboard<span>ADMIN</span></div>
+    <input type="password" id="pw" placeholder="Password" autocomplete="current-password" required autofocus />
+    <button class="btn" type="submit">Log In</button>
+    <p class="err" id="loginErr"></p>
+  </form>
+</section>
+
+<div id="app" class="hide">
+  <header><div class="bar">
+    <img src="/assets/logo-sm.png" alt="" style="height:40px;width:auto;background:#fff;border-radius:8px;padding:3px 6px" />
+    <div class="brand">ChrisDaChiro<span>ADMIN</span></div>
+    <nav class="tabs"><button class="tab on" data-tab="orders">Orders</button><button class="tab" data-tab="products">Products</button></nav>
+    <div class="spacer"></div>
+    <a class="btn ghost" href="/" target="_blank">View Site</a>
+    <button class="btn ghost" id="logout">Log Out</button>
+  </div></header>
+
+  <main>
+    <section id="orders">
+      <div class="stats" id="stats"></div>
+      <div class="tools">
+        <input type="search" id="q" placeholder="Search name, email, order #" />
+        <div class="chips" id="filters"></div>
+        <div class="spacer"></div>
+        <button class="btn ghost" id="refresh">Refresh</button>
+        <button class="btn ghost" id="csv">Export CSV</button>
+      </div>
+      <div class="list" id="list"></div>
+    </section>
+
+    <section id="products" class="hide">
+      <p class="sub" style="margin:0 0 14px">Changes go live on the site as soon as you save. Prices here are what customers are charged.</p>
+      <div class="pgrid" id="pgrid"></div>
+      <div class="savebar"><span class="sub" id="pmsg"></span><button class="btn" id="saveProducts">Save Products</button></div>
+    </section>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money=n=>"$"+Number(n||0).toFixed(Number(n)%1?2:0);
+const LABEL={unpaid:"Awaiting payment",paid:"Paid",in_production:"Preparing",shipped:"Shipped",cancelled:"Cancelled"};
+const STAT=Object.keys(LABEL);
+const CARRIERS=["USPS","UPS","FedEx","DHL","Other"];
+let token=null;try{token=localStorage.getItem("cdc_admin")}catch(e){}
+let orders=[],filter="open",open=new Set(),catalog=[];
+
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove("on"),2600)}
+async function api(path,opts={}){
+  const r=await fetch(path,{...opts,headers:{"Content-Type":"application/json",Authorization:"Bearer "+token,...(opts.headers||{})}});
+  let b={};try{b=await r.json()}catch(e){}
+  if(r.status===401&&!path.endsWith("/login")){logout();throw new Error(b.error||"Logged out")}
+  if(!r.ok)throw new Error(b.error||("Error "+r.status));
+  return b;
+}
+function logout(){token=null;try{localStorage.removeItem("cdc_admin")}catch(e){}$("#app").classList.add("hide");$("#login").classList.remove("hide")}
+$("#logout").onclick=logout;
+
+$("#loginForm").onsubmit=async e=>{
+  e.preventDefault();$("#loginErr").textContent="";const btn=$("#loginForm .btn");btn.disabled=true;
+  try{const b=await api("/api/admin/login",{method:"POST",body:JSON.stringify({password:$("#pw").value})});token=b.token;try{localStorage.setItem("cdc_admin",token)}catch(e){}start()}
+  catch(err){$("#loginErr").textContent=err.message}
+  btn.disabled=false;
+};
+
+async function start(){$("#login").classList.add("hide");$("#app").classList.remove("hide");await loadOrders();loadProducts()}
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x===t));
+  $("#orders").classList.toggle("hide",t.dataset.tab!=="orders");$("#products").classList.toggle("hide",t.dataset.tab!=="products");
+});
+
+/* ---------------- Orders ---------------- */
+async function loadOrders(){try{orders=(await api("/api/admin/orders")).orders;renderOrders()}catch(e){toast(e.message)}}
+$("#refresh").onclick=()=>loadOrders().then(()=>toast("Up to date"));
+$("#q").oninput=renderOrders;
+
+function renderStats(){
+  const live=orders.filter(o=>o.status!=="cancelled");
+  const paid=live.filter(o=>o.status!=="unpaid");
+  const c=s=>orders.filter(o=>o.status===s).length;
+  $("#stats").innerHTML=`
+    <div class="stat"><b>${money(paid.reduce((s,o)=>s+o.total,0))}</b><span>Revenue (paid)</span></div>
+    <div class="stat"><b>${c("unpaid")}</b><span>Awaiting Cash App</span></div>
+    <div class="stat"><b>${c("paid")+c("in_production")}</b><span>To prepare &amp; ship</span></div>
+    <div class="stat"><b>${c("shipped")}</b><span>Shipped</span></div>`;
+}
+function renderFilters(){
+  const opts=[["open","Open"],["all","All"],...STAT.map(s=>[s,LABEL[s]])];
+  $("#filters").innerHTML=opts.map(([k,l])=>{const n=k==="all"?orders.length:k==="open"?orders.filter(o=>!["shipped","cancelled"].includes(o.status)).length:orders.filter(o=>o.status===k).length;
+    return `<button class="chip ${filter===k?"on":""}" data-f="${k}">${l} · ${n}</button>`}).join("");
+  $("#filters").querySelectorAll(".chip").forEach(b=>b.onclick=()=>{filter=b.dataset.f;renderOrders()});
+}
+function visible(){
+  const q=$("#q").value.trim().toLowerCase();
+  return orders.filter(o=>filter==="all"?true:filter==="open"?!["shipped","cancelled"].includes(o.status):o.status===filter)
+    .filter(o=>!q||[o.id,o.customer&&o.customer.name,o.customer&&o.customer.email,o.cashappName,o.customer&&o.customer.instagram].join(" ").toLowerCase().includes(q));
+}
+const when=d=>new Date(d).toLocaleString([], {month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});
+const addr=a=>a?[a.name,a.line1,a.line2,[a.city,a.state,a.zip].filter(Boolean).join(", "),a.country].filter(Boolean).map(esc).join("<br>"):"—";
+
+function renderOrders(){
+  renderStats();renderFilters();
+  const list=visible();
+  if(!list.length){$("#list").innerHTML=`<div class="empty">${orders.length?"No orders match.":"No orders yet. They'll show up here the moment someone checks out."}</div>`;return}
+  $("#list").innerHTML=list.map(o=>{
+    const n=o.items.reduce((s,l)=>s+l.qty,0);
+    return `<div class="row" data-id="${o.id}">
+      <div class="row-head" data-toggle>
+        <div><div class="id">${esc(o.id)}</div><div class="sub">${when(o.createdAt)}</div></div>
+        <div class="c-hide"><b>${esc(o.customer.name||"—")}</b><div class="sub">${esc(o.customer.email)}</div></div>
+        <div class="c-hide sub">${o.items.map(l=>esc(l.name)+(l.qty>1?" ×"+l.qty:"")).join(", ")}</div>
+        <div class="total">${money(o.total)}<div class="sub">${n} item${n>1?"s":""}</div></div>
+        <div class="c-hide"><span class="pill m-${o.method}">${o.method==="cashapp"?"Cash App":"Card"}</span></div>
+        <div><span class="pill s-${o.status}">${LABEL[o.status]}</span></div>
+      </div>
+      ${open.has(o.id)?body(o):""}
+    </div>`}).join("");
+}
+function body(o){
+  const t=o.tracking||{};
+  return `<div class="row-body">
+    <div>
+      <h4>Items</h4>
+      <div class="items">${o.items.map(l=>`<div><span>${esc(l.name)} × ${l.qty}</span><span>${money(l.total)}</span></div>`).join("")}
+      <div><span class="sub">Shipping</span><span class="sub">${o.shipping?money(o.shipping):"Free"}</span></div>
+      ${o.tax?`<div><span class="sub">Sales tax</span><span class="sub">$${Number(o.tax).toFixed(2)}</span></div>`:""}
+      <div><b>Total</b><b>${money(o.total)}</b></div></div>
+      ${o.notes?`<h4 style="margin-top:14px">Customer notes</h4><p>${esc(o.notes)}</p>`:""}
+    </div>
+    <div>
+      <h4>Customer</h4>
+      <p><b>${esc(o.customer.name)}</b><br><a href="mailto:${esc(o.customer.email)}">${esc(o.customer.email)}</a><br>${o.customer.phone?`<a href="tel:${esc(o.customer.phone)}">${esc(o.customer.phone)}</a>`:""}</p>
+      <h4 style="margin-top:14px">Ship to</h4><p>${addr(o.address)}</p>
+      <h4 style="margin-top:14px">Payment</h4>
+      <p>${o.method==="cashapp"?`Cash App from <b>${esc(o.cashappName)}</b><br><span class="sub">Look for note "${esc(o.id)}" for ${money(o.total)}</span>`:`Card / Apple Pay via Stripe${o.paymentIntent?`<br><a target="_blank" href="https://dashboard.stripe.com/payments/${esc(o.paymentIntent)}">View in Stripe</a>`:""}`}</p>
+    </div>
+    <div class="edit">
+      <h4>Update order</h4>
+      <select data-f="status">${STAT.map(s=>`<option value="${s}" ${s===o.status?"selected":""}>${LABEL[s]}</option>`).join("")}</select>
+      <div class="two"><select data-f="carrier">${CARRIERS.map(c=>`<option ${c===(t.carrier||"USPS")?"selected":""}>${c}</option>`).join("")}</select>
+      <input data-f="number" placeholder="Tracking number" value="${esc(t.number||"")}" /></div>
+      ${t.url?`<a class="sub" href="${esc(t.url)}" target="_blank">Open tracking ↗</a>`:""}
+      <textarea data-f="note" rows="2" placeholder="Private note (only you see this)">${esc(o.adminNote||"")}</textarea>
+      <label class="check"><input type="checkbox" data-f="notify" checked /> Email customer about this update</label>
+      <button class="btn" data-save>Save</button>
+      <div class="hist">${(o.history||[]).map(h=>`${when(h.at)} — ${LABEL[h.status]||h.status} <span>(${esc(h.by)})</span>`).join("<br>")}</div>
+    </div>
+  </div>`;
+}
+$("#list").addEventListener("click",async e=>{
+  const row=e.target.closest(".row");if(!row)return;const id=row.dataset.id;
+  if(e.target.closest("[data-toggle]")){open.has(id)?open.delete(id):open.add(id);renderOrders();return}
+  if(e.target.closest("[data-save]")){
+    const g=f=>row.querySelector(`[data-f="${f}"]`);const btn=e.target.closest("[data-save]");btn.disabled=true;btn.textContent="Saving…";
+    try{
+      const r=await api("/api/admin/orders",{method:"PATCH",body:JSON.stringify({id,status:g("status").value,tracking:{carrier:g("carrier").value,number:g("number").value},adminNote:g("note").value,notify:g("notify").checked})});
+      orders=orders.map(o=>o.id===id?r.order:o);renderOrders();
+      toast("Saved"+(r.emailed&&r.emailed.length?" — emailed customer ("+r.emailed.join(", ")+")":""));
+    }catch(err){toast(err.message);btn.disabled=false;btn.textContent="Save"}
+  }
+});
+$("#csv").onclick=()=>{
+  const rows=[["Order","Date","Status","Method","Name","Email","Phone","Cash App","Items","Tax","Total","Address","Carrier","Tracking","Notes"]];
+  visible().forEach(o=>rows.push([o.id,o.createdAt,LABEL[o.status],o.method,o.customer.name,o.customer.email,o.customer.phone,o.cashappName||"",
+    o.items.map(l=>`${l.name} x${l.qty}`).join("; "),o.tax||0,o.total,o.address?[o.address.line1,o.address.line2,o.address.city,o.address.state,o.address.zip,o.address.country].filter(Boolean).join(", "):"",
+    o.tracking?o.tracking.carrier:"",o.tracking?o.tracking.number:"",o.notes||""]));
+  const csv=rows.map(r=>r.map(v=>'"'+String(v==null?"":v).replace(/"/g,'""')+'"').join(",")).join("\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download="chrisdachiro-orders-"+new Date().toISOString().slice(0,10)+".csv";a.click();
+};
+
+/* ---------------- Products ---------------- */
+async function loadProducts(){try{const b=await api("/api/admin/products");catalog=b.products;renderProducts()}catch(e){toast(e.message)}}
+function renderProducts(){
+  $("#pgrid").innerHTML=catalog.map((p,i)=>`<div class="pcard" data-i="${i}">
+    <h3>${esc(p.name)}</h3>
+    <div><div class="sub" style="margin-bottom:6px">Price</div><div class="price"><span>$</span><input type="number" min="1" step="1" value="${p.price}" data-price /></div></div>
+    <label class="toggle"><input type="checkbox" data-sold ${p.soldOut?"checked":""}/><span class="sw"></span><span>${p.soldOut?"Sold out — hidden from checkout":"In stock"}</span></label>
+  </div>`).join("");
+}
+$("#pgrid").addEventListener("change",e=>{
+  const card=e.target.closest(".pcard");if(!card)return;const p=catalog[+card.dataset.i];
+  if(e.target.matches("[data-price]"))p.price=Number(e.target.value);
+  if(e.target.matches("[data-sold]")){p.soldOut=e.target.checked;renderProducts()}
+  $("#pmsg").textContent="Unsaved changes";
+});
+$("#saveProducts").onclick=async()=>{
+  const b=$("#saveProducts");b.disabled=true;
+  try{const r=await api("/api/admin/products",{method:"PUT",body:JSON.stringify({products:catalog})});catalog=r.products;renderProducts();$("#pmsg").textContent="";toast("Products saved — live on the site")}
+  catch(e){toast(e.message)}
+  b.disabled=false;
+};
+
+if(token)start();
+})();
+</script>
+</body>
+</html>
