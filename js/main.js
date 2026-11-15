@@ -16,8 +16,13 @@ const PRODUCTS = [
     name: "Cervical Traction Pillow",
     price: 20,
     tag: "Neck relief",
-    image: "assets/pillow.svg",   // placeholder illustration
-    photo: "",                     // add a real product photo path here, e.g. "assets/pillow.jpg"
+    // Gallery, in order. The first image is the shop thumbnail. Each name maps to
+    // assets/products/<name>.png plus <name>.webp and <name>-600.webp.
+    images: [
+      { src: "neck-mobility-tool-01-logo", alt: "Front view of the black neck mobility tool with the gold logo." },
+      { src: "neck-mobility-tool-02-side", alt: "Side view of the black neck mobility tool showing its curved profile." },
+      { src: "neck-mobility-tool-03-six-nodes", alt: "Black neck mobility tool showing six raised massage nodes." },
+    ],
     desc: "A contoured traction pillow that cradles the neck in a gentle curve, made for unwinding after long hours at a desk, behind the wheel or on your feet.",
     features: [
       "Contoured design supports the natural curve of the neck",
@@ -30,8 +35,9 @@ const PRODUCTS = [
     name: "Compact Massage Gun",
     price: 80,
     tag: "Muscle recovery",
-    image: "assets/massage-gun.svg",
-    photo: "",                     // e.g. "assets/massage-gun.jpg"
+    images: [
+      { src: "mint-massage-gun-kit", alt: "Mint massage gun with a ball head and three interchangeable heads." },
+    ],
     desc: "Percussive massage that fits in a bag. Work out soreness and tight spots before or after workouts, or whenever the day catches up with you.",
     features: [
       "Compact, travel-friendly size",
@@ -55,15 +61,28 @@ const subtotal = () => Object.entries(cart).reduce((s, [id, q]) => s + (findP(id
 const shipping = () => (itemCount() > 0 ? CONFIG.shippingFlat : 0);
 const total = () => subtotal() + shipping();
 
+/* ---------- product images ---------- */
+const IMG = "assets/products/";
+function picture(im, cls) {
+  return `<picture>
+    <source type="image/webp" srcset="${IMG}${im.src}-600.webp 600w, ${IMG}${im.src}.webp 1200w" sizes="(max-width: 760px) 92vw, 560px" />
+    <img class="${cls}" src="${IMG}${im.src}.png" alt="${im.alt}" width="1254" height="1254" loading="lazy" decoding="async" />
+  </picture>`;
+}
+
 /* ---------- render products ---------- */
 function renderProducts() {
   $("#products").innerHTML = PRODUCTS.map((p) => `
     <article class="product reveal" data-id="${p.id}">
-      <div class="p-media">
-        <span class="p-tag">${p.tag}</span>
-        ${p.photo
-          ? `<img class="photo" src="${p.photo}" alt="${p.name}" loading="lazy" />`
-          : `<img src="${p.image}" alt="${p.name} (placeholder illustration)" loading="lazy" /><span class="placeholder-tag">Product photo coming soon</span>`}
+      <div class="p-gallery">
+        <div class="p-media">
+          <span class="p-tag">${p.tag}</span>
+          ${picture(p.images[0], "p-photo")}
+        </div>
+        ${p.images.length > 1 ? `<div class="p-thumbs" role="tablist" aria-label="${p.name} photos">
+          ${p.images.map((im, i) => `<button type="button" class="p-thumb${i ? "" : " on"}" data-img="${i}" role="tab" aria-selected="${i ? "false" : "true"}" aria-label="Photo ${i + 1} of ${p.images.length}">
+            <img src="${IMG}${im.src}-600.webp" alt="" loading="lazy" width="80" height="80" /></button>`).join("")}
+        </div>` : ""}
       </div>
       <div class="p-body">
         <div class="p-top"><h3>${p.name}</h3><span class="price">${money(p.price)}</span></div>
@@ -82,6 +101,12 @@ function renderProducts() {
 
   document.querySelectorAll(".product").forEach((card) => {
     const qEl = $(".q", card);
+    const prod = findP(card.dataset.id);
+    card.querySelectorAll(".p-thumb").forEach((t) => t.addEventListener("click", () => {
+      const im = prod.images[+t.dataset.img];
+      $(".p-media picture", card).outerHTML = picture(im, "p-photo");
+      card.querySelectorAll(".p-thumb").forEach((x) => { x.classList.toggle("on", x === t); x.setAttribute("aria-selected", x === t); });
+    }));
     card.querySelectorAll("[data-q]").forEach((b) =>
       b.addEventListener("click", () => {
         qEl.textContent = Math.max(1, Math.min(20, +qEl.textContent + +b.dataset.q));
@@ -104,7 +129,7 @@ function renderCart(bump) {
     ? ids.map((id) => {
         const p = findP(id);
         return `<div class="c-item" data-id="${id}">
-          <img src="${p.photo || p.image}" alt="" />
+          <img src="${IMG}${p.images[0].src}-600.webp" alt="" />
           <div>
             <h4>${p.name}</h4>
             <div class="qty"><button data-c="-1" aria-label="Decrease">−</button><span>${cart[id]}</span><button data-c="1" aria-label="Increase">+</button></div>

@@ -18,8 +18,13 @@
 - Shipping is a flat **$5 per order** (`SHIPPING` in `netlify/lib/catalog.mjs`).
 
 ## Product photos
-1. Add the photos to `assets/` (e.g. `assets/pillow.jpg`, `assets/massage-gun.jpg`).
-2. In `js/main.js`, set the product's `photo: ""` to the path, e.g. `photo: "assets/pillow.jpg"`.
+Photos live in `assets/products/`. Each one has three versions: `name.png` (original), `name.webp` (1200px) and `name-600.webp` (thumbnails and phones). Browsers load the WebP files; the PNG is only a fallback.
+
+To add or swap a photo:
+1. Save it as a square image, then create the WebP versions (any converter works, e.g. squoosh.app), using the same name.
+2. In `js/main.js`, add it to the product's `images` list with alt text. The first image is the shop thumbnail; with more than one, a thumbnail gallery appears under the main photo.
+
+Photos are shown square and uncropped (`object-fit: contain`) on every screen size.
 
 Chris's photo: in `index.html`, replace `<div class="photo-placeholder">…</div>` in the About section with
 `<img src="assets/chris.jpg" alt="Chris" style="width:100%;height:100%;object-fit:cover">`.
